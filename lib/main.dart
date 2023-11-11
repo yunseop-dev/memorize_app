@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_todo/model/todo.dart';
+import 'package:flutter_todo/repository/todo_repository.dart';
 
 void main() => runApp(const MyApp());
 
@@ -25,27 +26,22 @@ class TodoScreen extends StatefulWidget {
   TodoScreenState createState() => TodoScreenState();
 }
 
-class Todo {
-  final String id;
-  String text;
-  bool done = false;
-
-  Todo({
-    String? id,
-    required this.text,
-  }) : id = id ?? const Uuid().v4();
-
-  setText(String value) {
-    text = value;
-  }
-
-  setDone(bool value) {
-    done = value;
-  }
-}
-
 class TodoScreenState extends State<TodoScreen> {
-  List<Todo> todos = [];
+  late List<Todo> _todos;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
+  Future<void> _loadTodos() async {
+    TodoRepository.getTodos().then((value) => {
+          setState(() {
+            _todos = value;
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +50,10 @@ class TodoScreenState extends State<TodoScreen> {
         title: const Text('To-Do List'),
       ),
       body: ListView.builder(
-        itemCount: todos.length,
+        itemCount: _todos.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(todos[index].text),
+            title: Text(_todos[index].text),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -65,14 +61,14 @@ class TodoScreenState extends State<TodoScreen> {
                   icon: const Icon(Icons.edit),
                   tooltip: 'edit',
                   onPressed: () {
-                    _showEditTodoDialog(context, todos[index]);
+                    _showEditTodoDialog(context, _todos[index]);
                   },
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),
                   tooltip: 'delete',
                   onPressed: () {
-                    _showDeleteTodoDialog(context, todos[index]);
+                    _showDeleteTodoDialog(context, _todos[index]);
                   },
                 ),
               ],
@@ -198,23 +194,26 @@ class TodoScreenState extends State<TodoScreen> {
     );
   }
 
-  void _addTodoItem(String newTodo) {
+  void _addTodoItem(String newTodo) async {
+    Todo todo = Todo(text: newTodo, done: false);
+    await TodoRepository.add(todo);
     setState(() {
-      todos.add(Todo(text: newTodo));
+      _todos.add(Todo(text: newTodo, done: false));
     });
   }
 
-  void _editTodoItem(Todo target, String newTodo) {
+  void _editTodoItem(Todo target, String newTodo) async {
+    Todo todo = Todo(text: newTodo, done: false);
+    await TodoRepository.edit(target, todo);
     setState(() {
-      todos = [
-        ...todos.map((e) => e.id == target.id ? Todo(text: newTodo) : e)
-      ];
+      _todos = [..._todos.map((e) => e.id == target.id ? todo : e)];
     });
   }
 
-  void _deleteTodoItem(Todo target) {
+  void _deleteTodoItem(Todo target) async {
+    await TodoRepository.delete(target);
     setState(() {
-      todos = [...todos.where((e) => e.id != target.id)];
+      _todos = [..._todos.where((e) => e.id != target.id)];
     });
   }
 }
