@@ -27,7 +27,7 @@ class TodoScreen extends StatefulWidget {
 }
 
 class TodoScreenState extends State<TodoScreen> {
-  late List<Todo> _todos;
+  late Future<List<Todo>> _todos;
 
   @override
   void initState() {
@@ -36,11 +36,9 @@ class TodoScreenState extends State<TodoScreen> {
   }
 
   Future<void> _loadTodos() async {
-    TodoRepository.getTodos().then((value) => {
-          setState(() {
-            _todos = value;
-          })
-        });
+    setState(() {
+      _todos = TodoRepository.getTodos();
+    });
   }
 
   @override
@@ -49,31 +47,45 @@ class TodoScreenState extends State<TodoScreen> {
       appBar: AppBar(
         title: const Text('To-Do List'),
       ),
-      body: ListView.builder(
-        itemCount: _todos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_todos[index].text),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  tooltip: 'edit',
-                  onPressed: () {
-                    _showEditTodoDialog(context, _todos[index]);
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  tooltip: 'delete',
-                  onPressed: () {
-                    _showDeleteTodoDialog(context, _todos[index]);
-                  },
-                ),
-              ],
-            ),
-          );
+      body: FutureBuilder<List<Todo>>(
+        future: _todos,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            List<Todo> todos = snapshot.data!;
+            if (todos.isEmpty) {
+              return const Center(child: Text('No data'));
+            }
+            return ListView.builder(
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(todos[index].text),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          tooltip: 'edit',
+                          onPressed: () {
+                            _showEditTodoDialog(context, todos[index]);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          tooltip: 'delete',
+                          onPressed: () {
+                            _showDeleteTodoDialog(context, todos[index]);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -197,23 +209,17 @@ class TodoScreenState extends State<TodoScreen> {
   void _addTodoItem(String newTodo) async {
     Todo todo = Todo(text: newTodo, done: false);
     await TodoRepository.add(todo);
-    setState(() {
-      _todos.add(Todo(text: newTodo, done: false));
-    });
+    await _loadTodos();
   }
 
   void _editTodoItem(Todo target, String newTodo) async {
     Todo todo = Todo(text: newTodo, done: false);
     await TodoRepository.edit(target, todo);
-    setState(() {
-      _todos = [..._todos.map((e) => e.id == target.id ? todo : e)];
-    });
+    await _loadTodos();
   }
 
   void _deleteTodoItem(Todo target) async {
     await TodoRepository.delete(target);
-    setState(() {
-      _todos = [..._todos.where((e) => e.id != target.id)];
-    });
+    await _loadTodos();
   }
 }
