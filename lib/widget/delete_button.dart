@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/repository/todo_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DeleteButton extends StatelessWidget {
+class DeleteButton extends ConsumerWidget {
+  late WidgetRef _ref;
   final Todo target;
-  const DeleteButton({super.key, required this.target});
+  DeleteButton({super.key, required this.target});
 
   void _deleteTodoItem() async {
-    await TodoRepository.delete(target);
-    // await _loadTodos();
+    _ref.read(todoListProvider.notifier).remove(target);
   }
 
   void _showDeleteTodoDialog(BuildContext context) {
@@ -41,7 +41,8 @@ class DeleteButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    _ref = ref;
     return IconButton(
       icon: const Icon(Icons.delete),
       tooltip: 'delete',

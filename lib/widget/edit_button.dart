@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/repository/todo_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class EditButton extends StatelessWidget {
+class EditButton extends ConsumerWidget {
+  late WidgetRef _ref;
   final Todo target;
-  const EditButton({super.key, required this.target});
+  EditButton({super.key, required this.target});
 
   void _editTodoItem(String newTodo) async {
-    Todo todo = Todo(text: newTodo, done: false);
-    await TodoRepository.edit(target.id, todo);
-    // await _loadTodos();
+    _ref.read(todoListProvider.notifier).edit(id: target.id, text: newTodo);
   }
 
   void _showEditTodoDialog(BuildContext context) {
@@ -54,7 +53,8 @@ class EditButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    _ref = ref;
     return IconButton(
       icon: const Icon(Icons.edit),
       tooltip: 'edit',

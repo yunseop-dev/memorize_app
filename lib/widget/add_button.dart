@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/repository/todo_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AddButton extends StatelessWidget {
-  const AddButton({super.key});
+class AddButton extends ConsumerWidget {
+  late WidgetRef _ref;
+  AddButton({super.key});
 
   void _showAddTodoDialog(BuildContext context) {
     showDialog(
@@ -42,13 +43,12 @@ class AddButton extends StatelessWidget {
   }
 
   void _addTodoItem(String newTodo) async {
-    Todo todo = Todo(text: newTodo, done: false);
-    await TodoRepository.add(todo);
-    // await _loadTodos();
+    _ref.read(todoListProvider.notifier).add(newTodo);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    _ref = ref;
     return FloatingActionButton(
       onPressed: () {
         _showAddTodoDialog(context);
