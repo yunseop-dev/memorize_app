@@ -3,15 +3,14 @@ import 'package:flutter_todo/model/todo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EditButton extends ConsumerWidget {
-  late WidgetRef _ref;
   final Todo target;
-  EditButton({super.key, required this.target});
+  const EditButton({super.key, required this.target});
 
-  void _editTodoItem(String newTodo) async {
-    _ref.read(todoListProvider.notifier).edit(id: target.id, text: newTodo);
+  void _editTodoItem(String newTodo, WidgetRef ref) async {
+    ref.read(todoListProvider.notifier).edit(id: target.id, text: newTodo);
   }
 
-  void _showEditTodoDialog(BuildContext context) {
+  void _showEditTodoDialog(BuildContext context, WidgetRef ref) {
     TextEditingController controller = TextEditingController(text: target.text);
 
     showDialog(
@@ -27,7 +26,7 @@ class EditButton extends ConsumerWidget {
               inputString = v;
             },
             onSubmitted: (newTodo) {
-              _editTodoItem(newTodo);
+              _editTodoItem(newTodo, ref);
               inputString = '';
               Navigator.of(context).pop();
             },
@@ -54,12 +53,11 @@ class EditButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    _ref = ref;
     return IconButton(
       icon: const Icon(Icons.edit),
       tooltip: 'edit',
       onPressed: () {
-        _showEditTodoDialog(context);
+        _showEditTodoDialog(context, ref);
       },
     );
   }

@@ -3,10 +3,9 @@ import 'package:flutter_todo/model/todo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddButton extends ConsumerWidget {
-  late WidgetRef _ref;
-  AddButton({super.key});
+  const AddButton({super.key});
 
-  void _showAddTodoDialog(BuildContext context) {
+  void _showAddTodoDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -42,16 +41,15 @@ class AddButton extends ConsumerWidget {
     );
   }
 
-  void _addTodoItem(String newTodo) async {
-    _ref.read(todoListProvider.notifier).add(newTodo);
+  void _addTodoItem(String newTodo, WidgetRef ref) async {
+    ref.read(todoListProvider.notifier).add(newTodo);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    _ref = ref;
     return FloatingActionButton(
       onPressed: () {
-        _showAddTodoDialog(context);
+        _showAddTodoDialog(context, ref);
       },
       tooltip: 'Add Todo',
       child: const Icon(Icons.add),

@@ -3,15 +3,14 @@ import 'package:flutter_todo/model/todo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DeleteButton extends ConsumerWidget {
-  late WidgetRef _ref;
   final Todo target;
-  DeleteButton({super.key, required this.target});
+  const DeleteButton({super.key, required this.target});
 
-  void _deleteTodoItem() async {
-    _ref.read(todoListProvider.notifier).remove(target);
+  void _deleteTodoItem(WidgetRef ref) async {
+    ref.read(todoListProvider.notifier).remove(target);
   }
 
-  void _showDeleteTodoDialog(BuildContext context) {
+  void _showDeleteTodoDialog(BuildContext context, WidgetRef ref) {
     AlertDialog alert = AlertDialog(
       title: const Text("Delete Item"),
       content: const Text("Item will be deleted."),
@@ -25,7 +24,7 @@ class DeleteButton extends ConsumerWidget {
         TextButton(
           child: const Text("Delete"),
           onPressed: () {
-            _deleteTodoItem();
+            _deleteTodoItem(ref);
             Navigator.of(context).pop();
           },
         ),
@@ -42,12 +41,11 @@ class DeleteButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    _ref = ref;
     return IconButton(
       icon: const Icon(Icons.delete),
       tooltip: 'delete',
       onPressed: () {
-        _showDeleteTodoDialog(context);
+        _showDeleteTodoDialog(context, ref);
       },
     );
   }
