@@ -40,7 +40,7 @@ class EditButton extends ConsumerWidget {
             TextButton(
                 onPressed: () {
                   if (inputString != '') {
-                    _editTodoItem(inputString);
+                    _editTodoItem(inputString, ref);
                   }
                   Navigator.of(context).pop();
                 },

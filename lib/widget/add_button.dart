@@ -18,7 +18,7 @@ class AddButton extends ConsumerWidget {
               inputString = v;
             },
             onSubmitted: (newTodo) {
-              _addTodoItem(newTodo);
+              _addTodoItem(newTodo, ref);
               inputString = '';
               Navigator.of(context).pop();
             },
@@ -31,7 +31,7 @@ class AddButton extends ConsumerWidget {
                 child: const Text('Cancel')),
             TextButton(
                 onPressed: () {
-                  _addTodoItem(inputString);
+                  _addTodoItem(inputString, ref);
                   Navigator.of(context).pop();
                 },
                 child: const Text('Input')),
