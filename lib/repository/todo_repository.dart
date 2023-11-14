@@ -1,6 +1,5 @@
 import 'package:flutter_todo/db/db.dart';
 import 'package:flutter_todo/model/todo.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TodoRepository {
@@ -13,10 +12,9 @@ class TodoRepository {
     );
   }
 
-  static Future<void> edit(Todo target, Todo newTodo) async {
+  static Future<void> edit(String id, Todo newTodo) async {
     final db = await TodoDatabase.instance.database;
-    await db.update('todos', newTodo.toMap(),
-        where: 'id = ?', whereArgs: [target.id]);
+    await db.update('todos', newTodo.toMap(), where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<List<Todo>> getTodos() async {

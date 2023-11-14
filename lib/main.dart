@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
 import 'package:flutter_todo/repository/todo_repository.dart';
+import 'package:flutter_todo/widget/add_button.dart';
+import 'package:flutter_todo/widget/delete_button.dart';
+import 'package:flutter_todo/widget/edit_button.dart';
 
 void main() => runApp(const MyApp());
 
@@ -67,19 +70,11 @@ class TodoScreenState extends State<TodoScreen> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          tooltip: 'edit',
-                          onPressed: () {
-                            _showEditTodoDialog(context, todos[index]);
-                          },
+                        EditButton(
+                          target: todos[index],
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          tooltip: 'delete',
-                          onPressed: () {
-                            _showDeleteTodoDialog(context, todos[index]);
-                          },
+                        DeleteButton(
+                          target: todos[index],
                         ),
                       ],
                     ),
@@ -88,138 +83,7 @@ class TodoScreenState extends State<TodoScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddTodoDialog(context);
-        },
-        tooltip: 'Add Todo',
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: const AddButton(),
     );
-  }
-
-  void _showAddTodoDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String inputString = '';
-        return AlertDialog(
-          title: const Text('Add Todo'),
-          content: TextField(
-            autofocus: true,
-            onChanged: (v) {
-              inputString = v;
-            },
-            onSubmitted: (newTodo) {
-              _addTodoItem(newTodo);
-              inputString = '';
-              Navigator.of(context).pop();
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel')),
-            TextButton(
-                onPressed: () {
-                  _addTodoItem(inputString);
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Input')),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showEditTodoDialog(BuildContext context, Todo target) {
-    TextEditingController controller = TextEditingController(text: target.text);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String inputString = '';
-        return AlertDialog(
-          title: const Text('Edit Todo'),
-          content: TextField(
-            autofocus: true,
-            controller: controller,
-            onChanged: (v) {
-              inputString = v;
-            },
-            onSubmitted: (newTodo) {
-              _editTodoItem(target, newTodo);
-              inputString = '';
-              Navigator.of(context).pop();
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel')),
-            TextButton(
-                onPressed: () {
-                  if (inputString != '') {
-                    _editTodoItem(target, inputString);
-                  }
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Edit')),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showDeleteTodoDialog(BuildContext context, Todo target) {
-    // set up the button
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Delete Item"),
-      content: const Text("Item will be deleted."),
-      actions: [
-        TextButton(
-          child: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: const Text("Delete"),
-          onPressed: () {
-            _deleteTodoItem(target);
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void _addTodoItem(String newTodo) async {
-    Todo todo = Todo(text: newTodo, done: false);
-    await TodoRepository.add(todo);
-    await _loadTodos();
-  }
-
-  void _editTodoItem(Todo target, String newTodo) async {
-    Todo todo = Todo(text: newTodo, done: false);
-    await TodoRepository.edit(target, todo);
-    await _loadTodos();
-  }
-
-  void _deleteTodoItem(Todo target) async {
-    await TodoRepository.delete(target);
-    await _loadTodos();
   }
 }
