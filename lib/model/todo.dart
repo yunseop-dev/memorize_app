@@ -58,4 +58,11 @@ class TodoList extends _$TodoList {
     state = state.whenData(
         (value) => [...value.where((element) => element.id != target.id)]);
   }
+
+  void toggle(Todo item) {
+    Todo todo = Todo(id: item.id, text: item.text, done: !item.done);
+    TodoRepository.edit(item.id, todo);
+    state = state
+        .whenData((value) => [...value.map((e) => e.id == item.id ? todo : e)]);
+  }
 }

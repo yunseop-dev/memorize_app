@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
 import 'package:flutter_todo/widget/add_button.dart';
-import 'package:flutter_todo/widget/delete_button.dart';
-import 'package:flutter_todo/widget/edit_button.dart';
+import 'package:flutter_todo/widget/todo_list_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() => runApp(const ProviderScope(child: MyApp()));
@@ -37,24 +36,12 @@ class TodoScreen extends HookConsumerWidget {
         AsyncData(:final value) => ListView.builder(
             itemCount: value.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(value[index].text),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    EditButton(
-                      target: value[index],
-                    ),
-                    DeleteButton(
-                      target: value[index],
-                    ),
-                  ],
-                ),
-              );
+              Todo item = value[index];
+              return TodoListTile(item: item);
             }),
         _ => const Center(child: CircularProgressIndicator()),
       },
-      floatingActionButton: AddButton(),
+      floatingActionButton: const AddButton(),
     );
   }
 }
