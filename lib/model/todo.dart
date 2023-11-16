@@ -47,22 +47,21 @@ class TodoList extends _$TodoList {
 
   void edit({required String id, required String text}) {
     TodoRepository.edit(id, Todo(text: text));
-    state = state.whenData((value) => [
-          ...value.map(
-              (e) => e.id == id ? Todo(text: text, id: id, done: e.done) : e)
-        ]);
+    state = state.whenData((value) => value
+        .map((e) => e.id == id ? Todo(text: text, id: id, done: e.done) : e)
+        .toList());
   }
 
   void remove(Todo target) {
     TodoRepository.delete(target);
     state = state.whenData(
-        (value) => [...value.where((element) => element.id != target.id)]);
+        (value) => value.where((element) => element.id != target.id).toList());
   }
 
   void toggle(Todo item) {
     Todo todo = Todo(id: item.id, text: item.text, done: !item.done);
     TodoRepository.edit(item.id, todo);
-    state = state
-        .whenData((value) => [...value.map((e) => e.id == item.id ? todo : e)]);
+    state = state.whenData(
+        (value) => value.map((e) => e.id == item.id ? todo : e).toList());
   }
 }
