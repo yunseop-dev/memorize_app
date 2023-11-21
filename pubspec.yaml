@@ -41,6 +41,7 @@ dependencies:
   hooks_riverpod: ^2.4.6
   flutter_hooks: ^0.20.3
   riverpod_annotation: ^2.3.1
+  speech_to_text: ^6.4.1
 
 dev_dependencies:
   flutter_test:
