@@ -6,45 +6,57 @@ class EditButton extends ConsumerWidget {
   final Todo target;
   const EditButton({super.key, required this.target});
 
-  void _editTodoItem(String newTodo, WidgetRef ref) async {
-    ref.read(todoListProvider.notifier).edit(id: target.id, text: newTodo);
+  void _editTodoItem(String title, String text, WidgetRef ref) async {
+    ref
+        .read(todoListProvider.notifier)
+        .edit(id: target.id, title: title, text: text);
   }
 
   void _showEditTodoDialog(BuildContext context, WidgetRef ref) {
-    TextEditingController controller = TextEditingController(text: target.text);
+    TextEditingController titleController =
+        TextEditingController(text: target.title);
+    TextEditingController textController =
+        TextEditingController(text: target.text);
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String inputString = '';
+        String title = '';
+        String text = '';
         return AlertDialog(
-          title: const Text('Edit Todo'),
-          content: TextField(
-            autofocus: true,
-            controller: controller,
-            onChanged: (v) {
-              inputString = v;
-            },
-            onSubmitted: (newTodo) {
-              _editTodoItem(newTodo, ref);
-              inputString = '';
-              Navigator.of(context).pop();
-            },
+          title: const Text('내용 수정'),
+          content: Column(
+            children: [
+              TextField(
+                autofocus: true,
+                controller: titleController,
+                onChanged: (v) {
+                  title = v;
+                },
+              ),
+              TextField(
+                autofocus: true,
+                controller: textController,
+                onChanged: (v) {
+                  text = v;
+                },
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel')),
+                child: const Text('취소')),
             TextButton(
                 onPressed: () {
-                  if (inputString != '') {
-                    _editTodoItem(inputString, ref);
+                  if (title != '') {
+                    _editTodoItem(title, text, ref);
                   }
                   Navigator.of(context).pop();
                 },
-                child: const Text('Edit')),
+                child: const Text('수정')),
           ],
         );
       },
@@ -55,7 +67,7 @@ class EditButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       icon: const Icon(Icons.edit),
-      tooltip: 'edit',
+      tooltip: '내용 수정',
       onPressed: () {
         _showEditTodoDialog(context, ref);
       },

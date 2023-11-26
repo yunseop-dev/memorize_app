@@ -13,7 +13,7 @@ class TodoListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      title: Text(item.text),
+      title: Text(item.title),
       leading: TodoCheckbox(item: item),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(

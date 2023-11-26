@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'To-Do App',
+      title: 'Memorize App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -33,7 +33,7 @@ class TodoScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('To-Do List'),
+        title: const Text('문장 암기 앱'),
       ),
       body: switch (todo) {
         AsyncError(:final error) => Text('Error: $error'),
@@ -47,10 +47,10 @@ class TodoScreen extends HookConsumerWidget {
       },
       bottomNavigationBar: BottomNavigationBar(
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.all_inbox), label: '전체보기'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.all_inbox_outlined), label: 'All'),
-          BottomNavigationBarItem(icon: Icon(Icons.checklist), label: 'Active'),
-          BottomNavigationBarItem(icon: Icon(Icons.done_all), label: 'Done'),
+              icon: Icon(Icons.library_books), label: '암기 중'),
+          BottomNavigationBarItem(icon: Icon(Icons.done_all), label: '완료'),
         ],
         currentIndex: currentIndex.value,
         onTap: (value) {

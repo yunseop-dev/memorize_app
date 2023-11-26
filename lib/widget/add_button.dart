@@ -9,19 +9,28 @@ class AddButton extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String inputString = '';
+        String title = '';
+        String text = '';
         return AlertDialog(
-          title: const Text('Add Todo'),
-          content: TextField(
-            autofocus: true,
-            onChanged: (v) {
-              inputString = v;
-            },
-            onSubmitted: (newTodo) {
-              _addTodoItem(newTodo, ref);
-              inputString = '';
-              Navigator.of(context).pop();
-            },
+          title: const Text('문장 추가'),
+          content: Column(
+            children: [
+              TextField(
+                autofocus: true,
+                decoration: const InputDecoration(hintText: '제목을 입력하세요...'),
+                onChanged: (v) {
+                  title = v;
+                },
+              ),
+              TextField(
+                maxLines: null,
+                autofocus: true,
+                decoration: const InputDecoration(hintText: '내용을 입력하세요...'),
+                onChanged: (v) {
+                  text = v;
+                },
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -31,7 +40,7 @@ class AddButton extends ConsumerWidget {
                 child: const Text('Cancel')),
             TextButton(
                 onPressed: () {
-                  _addTodoItem(inputString, ref);
+                  _addTodoItem(title, text, ref);
                   Navigator.of(context).pop();
                 },
                 child: const Text('Input')),
@@ -41,8 +50,8 @@ class AddButton extends ConsumerWidget {
     );
   }
 
-  void _addTodoItem(String newTodo, WidgetRef ref) async {
-    ref.read(todoListProvider.notifier).add(newTodo);
+  void _addTodoItem(String title, String text, WidgetRef ref) async {
+    ref.read(todoListProvider.notifier).add(title, text);
   }
 
   @override
@@ -51,7 +60,7 @@ class AddButton extends ConsumerWidget {
       onPressed: () {
         _showAddTodoDialog(context, ref);
       },
-      tooltip: 'Add Todo',
+      tooltip: '문장 추가',
       child: const Icon(Icons.add),
     );
   }

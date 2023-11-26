@@ -12,7 +12,7 @@ class TodoDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('todos.db');
+    _database = await _initDB('memorize.db');
     return _database!;
   }
 
@@ -25,11 +25,24 @@ class TodoDatabase {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE todos(
+      CREATE TABLE memory_cards (
         id TEXT PRIMARY KEY,
+        title TEXT,
         text TEXT,
-        done INTEGER
-      )
+        done INTEGER,
+        created_at DATETIME,
+        updated_at DATETIME
+      );
+
+      CREATE TABLE records (
+        id INTEGER PRIMARY KEY,
+        text TEXT,
+        created_at DATETIME,
+        updated_at DATETIME,
+        path TEXT,
+        memory_card_id INTEGER,
+        FOREIGN KEY (memory_card_id) REFERENCES memory_cards (id)
+      );
     ''');
   }
 }
