@@ -17,12 +17,13 @@ class RecordItemList extends HookConsumerWidget {
       AsyncData(:final value) => ListView.builder(
           itemCount: value.length,
           itemBuilder: (context, index) {
+            RecordItem item = value[index];
             return ListTile(
               title: Text('녹음 $index'),
               subtitle: const Text('yyyy-mm-dd'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const RecordItemDetail()));
+                    builder: (context) => RecordItemDetail(item: item)));
               },
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

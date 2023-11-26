@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/model/record_item.dart';
 import 'package:pretty_diff_text/pretty_diff_text.dart';
 
 class RecordItemDetail extends StatefulWidget {
-  const RecordItemDetail({Key? key}) : super(key: key);
+  final RecordItem item;
+
+  const RecordItemDetail({Key? key, required this.item}) : super(key: key);
 
   @override
   RecordItemDetailState createState() => RecordItemDetailState();
@@ -44,8 +47,7 @@ class RecordItemDetailState extends State<RecordItemDetail> {
                   _buildTextSection(
                       'Script', '이스라엘아 들으라 우리 하나님 여호와는 오직 유일한 여호와이시니',
                       backgroundColor: Colors.cyan.shade100),
-                  _buildTextSection(
-                      'Recorded', '들으라 이스라엘아 우리 하나님 여호와는 오직 유일한 여호와이시니',
+                  _buildTextSection('Recorded', widget.item.text,
                       backgroundColor: Colors.green.shade200),
                   _buildOutputSection(),
                 ],
@@ -106,8 +108,8 @@ class RecordItemDetailState extends State<RecordItemDetail> {
             color: Colors.red.shade200,
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: const PrettyDiffText(
-            oldText: '들으라 이스라엘아 우리 하나님 여호와는 오직 유일한 여호와이시니',
+          child: PrettyDiffText(
+            oldText: widget.item.text,
             newText: '이스라엘아 들으라 우리 하나님 여호와는 오직 유일한 여호와이시니',
           ),
         ),
