@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/screen/record_item_detail.dart';
+import 'package:flutter_todo/widget/record_button.dart';
+import 'package:flutter_todo/widget/record_item_list.dart';
 
 class TodoItemDetail extends StatefulWidget {
   final Todo item;
@@ -12,7 +13,6 @@ class TodoItemDetail extends StatefulWidget {
 }
 
 class TodoItemDetailState extends State<TodoItemDetail> {
-  bool isListening = false;
   int currentIndex = 0;
 
   @override
@@ -20,22 +20,8 @@ class TodoItemDetailState extends State<TodoItemDetail> {
     super.initState();
   }
 
-  List<Widget> get widgetOptions => [
-        Text(widget.item.text),
-        ListView.builder(
-          itemCount: 1,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('녹음 $index'),
-              subtitle: const Text('yyyy-mm-dd'),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const RecordItemDetail()));
-              },
-            );
-          },
-        ),
-      ];
+  List<Widget> get widgetOptions =>
+      [Text(widget.item.text), RecordItemList(memoryCardId: widget.item.id)];
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +36,17 @@ class TodoItemDetailState extends State<TodoItemDetail> {
           setState(() {
             currentIndex = value;
           });
-          print(value);
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.note), label: 'Script'),
-          BottomNavigationBarItem(icon: Icon(Icons.mic), label: 'Record')
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: '본문보기'),
+          BottomNavigationBarItem(icon: Icon(Icons.notes), label: '녹음 목록')
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('onPressed');
-        },
-        child: Icon(!isListening ? Icons.mic : Icons.stop),
-      ),
+      floatingActionButton: currentIndex == 0
+          ? null
+          : RecordButton(
+              id: widget.item.id,
+            ),
     );
   }
 }

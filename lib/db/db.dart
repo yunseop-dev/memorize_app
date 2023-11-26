@@ -33,9 +33,10 @@ class TodoDatabase {
         created_at DATETIME,
         updated_at DATETIME
       );
-
-      CREATE TABLE records (
-        id INTEGER PRIMARY KEY,
+    ''');
+    await db.execute('''
+       CREATE TABLE records (
+        id TEXT PRIMARY KEY,
         text TEXT,
         created_at DATETIME,
         updated_at DATETIME,
