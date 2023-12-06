@@ -47,10 +47,10 @@ class TodoScreen extends HookConsumerWidget {
       },
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.all_inbox), label: '전체보기'),
           BottomNavigationBarItem(
               icon: Icon(Icons.library_books), label: '암기 중'),
           BottomNavigationBarItem(icon: Icon(Icons.done_all), label: '완료'),
+          BottomNavigationBarItem(icon: Icon(Icons.all_inbox), label: '전체보기'),
         ],
         currentIndex: currentIndex.value,
         onTap: (value) {

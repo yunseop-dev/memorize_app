@@ -5,12 +5,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'filtered_todo.g.dart';
 
 enum TodoListFilter {
-  all,
   active,
   done,
+  all,
 }
 
-final todoListFilter = StateProvider((_) => TodoListFilter.all);
+final todoListFilter = StateProvider((_) => TodoListFilter.active);
+
 @riverpod
 AsyncValue<List<Todo>> filteredTodo(FilteredTodoRef ref) {
   final filter = ref.watch(todoListFilter);
