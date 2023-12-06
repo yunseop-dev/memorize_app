@@ -72,3 +72,8 @@ class TodoList extends _$TodoList {
         (value) => value.map((e) => e.id == item.id ? todo : e).toList());
   }
 }
+
+@riverpod
+Future<Todo> memoryCardDetail(MemoryCardDetailRef ref, String id) async {
+  return TodoRepository.getById(id);
+}

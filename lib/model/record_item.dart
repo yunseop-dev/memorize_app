@@ -10,18 +10,22 @@ class RecordItem {
   final String id;
   final String text;
   final String memoryCardId;
+  final DateTime createdAt;
 
   RecordItem({
     String? id,
     required this.text,
     required this.memoryCardId,
-  }) : id = id ?? const Uuid().v4();
+    DateTime? createdAt, // createdAt를 선택적(optional)으로 변경
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now();
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'text': text,
       'memory_card_id': memoryCardId,
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
@@ -30,6 +34,7 @@ class RecordItem {
       id: map['id'],
       text: map['text'],
       memoryCardId: map['memory_card_id'],
+      createdAt: DateTime.parse(map['created_at']),
     );
   }
 }

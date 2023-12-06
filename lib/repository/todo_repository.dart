@@ -26,6 +26,21 @@ class TodoRepository {
     });
   }
 
+  static Future<Todo> getById(String id) async {
+    final db = await TodoDatabase.instance.database;
+    List<Map<String, dynamic>> maps = await db.query(
+      'memory_cards',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return Todo.fromMap(maps[0]);
+    } else {
+      throw Exception('Todo not found');
+    }
+  }
+
   static Future<void> delete(Todo target) async {
     final db = await TodoDatabase.instance.database;
     await db.delete('memory_cards', where: 'id = ?', whereArgs: [target.id]);

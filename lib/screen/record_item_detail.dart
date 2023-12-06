@@ -1,60 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/record_item.dart';
+import 'package:flutter_todo/model/todo.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pretty_diff_text/pretty_diff_text.dart';
 
-class RecordItemDetail extends StatefulWidget {
+class RecordItemDetail extends HookConsumerWidget {
   final RecordItem item;
+  final String text = '내 녹음본';
 
-  const RecordItemDetail({Key? key, required this.item}) : super(key: key);
-
-  @override
-  RecordItemDetailState createState() => RecordItemDetailState();
-}
-
-class RecordItemDetailState extends State<RecordItemDetail> {
-  String text = '내 녹음본';
+  const RecordItemDetail({super.key, required this.item});
 
   @override
-  void initState() {
-    super.initState();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final card = ref.watch(memoryCardDetailProvider.call(item.memoryCardId));
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('녹음 0')),
-        body: Container(
-          color: Colors.green[100],
-          child: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(16.0),
-              constraints: const BoxConstraints(maxWidth: 400.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildTextSection(
-                      'Script', '이스라엘아 들으라 우리 하나님 여호와는 오직 유일한 여호와이시니',
-                      backgroundColor: Colors.cyan.shade100),
-                  _buildTextSection('Recorded', widget.item.text,
-                      backgroundColor: Colors.green.shade200),
-                  _buildOutputSection(),
-                ],
+    return switch (card) {
+      AsyncError(:final error) => Text('Error: $error'),
+      AsyncData(:final value) => Scaffold(
+          appBar: AppBar(title: Text(value.title)),
+          body: Container(
+            color: Colors.green[100],
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16.0),
+                constraints: const BoxConstraints(maxWidth: 400.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildTextSection('Script', value.text,
+                        backgroundColor: Colors.cyan.shade100),
+                    _buildTextSection('Recorded', item.text,
+                        backgroundColor: Colors.green.shade200),
+                    _buildOutputSection(value.text),
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+      _ => const Center(child: CircularProgressIndicator()),
+    };
   }
 
   Widget _buildTextSection(String title, String text,
@@ -89,7 +85,7 @@ class RecordItemDetailState extends State<RecordItemDetail> {
     );
   }
 
-  Widget _buildOutputSection() {
+  Widget _buildOutputSection(String newText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,8 +105,8 @@ class RecordItemDetailState extends State<RecordItemDetail> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: PrettyDiffText(
-            oldText: widget.item.text,
-            newText: '이스라엘아 들으라 우리 하나님 여호와는 오직 유일한 여호와이시니',
+            oldText: item.text,
+            newText: newText,
           ),
         ),
         const SizedBox(height: 10.0),

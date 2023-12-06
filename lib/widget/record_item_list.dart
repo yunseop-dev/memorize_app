@@ -20,28 +20,11 @@ class RecordItemList extends HookConsumerWidget {
             RecordItem item = value[index];
             return ListTile(
               title: Text('녹음 $index'),
-              subtitle: const Text('yyyy-mm-dd'),
+              subtitle: Text(item.createdAt.toIso8601String()),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => RecordItemDetail(item: item)));
               },
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.play_arrow_rounded),
-                    onPressed: () {
-                      print('play');
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.stop_rounded),
-                    onPressed: () {
-                      print('stop');
-                    },
-                  ),
-                ],
-              ),
             );
           },
         ),
