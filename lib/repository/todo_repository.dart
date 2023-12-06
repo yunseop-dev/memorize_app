@@ -12,10 +12,10 @@ class TodoRepository {
     );
   }
 
-  static Future<void> edit(String id, Todo newTodo) async {
+  static Future<void> edit(Todo newTodo) async {
     final db = await TodoDatabase.instance.database;
     await db.update('memory_cards', newTodo.toMap(),
-        where: 'id = ?', whereArgs: [id]);
+        where: 'id = ?', whereArgs: [newTodo.id]);
   }
 
   static Future<List<Todo>> getTodos() async {
@@ -33,7 +33,6 @@ class TodoRepository {
       where: 'id = ?',
       whereArgs: [id],
     );
-
     if (maps.isNotEmpty) {
       return Todo.fromMap(maps[0]);
     } else {

@@ -50,7 +50,7 @@ class TodoList extends _$TodoList {
   }
 
   void edit({required String id, required String title, required String text}) {
-    TodoRepository.edit(id, Todo(title: title, text: text));
+    TodoRepository.edit(Todo(id: id, title: title, text: text));
     state = state.whenData((value) => value
         .map((e) => e.id == id
             ? Todo(title: title, text: text, id: id, done: e.done)
@@ -67,7 +67,7 @@ class TodoList extends _$TodoList {
   void toggle(Todo item) {
     Todo todo =
         Todo(id: item.id, title: item.title, text: item.text, done: !item.done);
-    TodoRepository.edit(item.id, todo);
+    TodoRepository.edit(todo);
     state = state.whenData(
         (value) => value.map((e) => e.id == item.id ? todo : e).toList());
   }
