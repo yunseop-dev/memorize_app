@@ -19,11 +19,12 @@ class RecordItemList extends HookConsumerWidget {
           itemBuilder: (context, index) {
             RecordItem item = value[index];
             return ListTile(
-              title: Text('녹음 $index'),
+              title: Text('녹음 ${index + 1}'),
               subtitle: Text(item.createdAt.toIso8601String()),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RecordItemDetail(item: item)));
+                    builder: (context) =>
+                        RecordItemDetail(item: item, index: index + 1)));
               },
             );
           },

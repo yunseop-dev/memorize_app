@@ -6,9 +6,9 @@ import 'package:pretty_diff_text/pretty_diff_text.dart';
 
 class RecordItemDetail extends HookConsumerWidget {
   final RecordItem item;
-  final String text = '내 녹음본';
+  final int index;
 
-  const RecordItemDetail({super.key, required this.item});
+  const RecordItemDetail({super.key, required this.item, required this.index});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +17,7 @@ class RecordItemDetail extends HookConsumerWidget {
     return switch (card) {
       AsyncError(:final error) => Text('Error: $error'),
       AsyncData(:final value) => Scaffold(
-          appBar: AppBar(title: Text(value.title)),
+          appBar: AppBar(title: Text('${value.title} / 녹음 $index')),
           body: Container(
             color: Colors.green[100],
             child: Center(
