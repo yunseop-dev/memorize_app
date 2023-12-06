@@ -21,8 +21,8 @@ class EditButton extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String title = '';
-        String text = '';
+        String title = target.title;
+        String text = target.text;
         return AlertDialog(
           title: const Text('내용 수정'),
           content: Column(
@@ -51,9 +51,7 @@ class EditButton extends ConsumerWidget {
                 child: const Text('취소')),
             TextButton(
                 onPressed: () {
-                  if (title != '') {
-                    _editTodoItem(title, text, ref);
-                  }
+                  _editTodoItem(title, text, ref);
                   Navigator.of(context).pop();
                 },
                 child: const Text('수정')),
