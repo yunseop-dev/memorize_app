@@ -49,4 +49,10 @@ class RecordItemList extends _$RecordItemList {
     RecordItemRepository.add(item);
     state = state.whenData((value) => [...value, item]);
   }
+
+  void remove(RecordItem target) {
+    RecordItemRepository.delete(target);
+    state = state.whenData(
+        (value) => value.where((element) => element.id != target.id).toList());
+  }
 }

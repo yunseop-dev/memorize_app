@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/record_item.dart';
 import 'package:flutter_todo/screen/record_item_detail.dart';
 import 'package:flutter_todo/util/dateformat.dart';
+import 'package:flutter_todo/widget/delete_record_item_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RecordItemList extends HookConsumerWidget {
@@ -27,6 +28,14 @@ class RecordItemList extends HookConsumerWidget {
                     builder: (context) =>
                         RecordItemDetail(item: item, index: index + 1)));
               },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DeleteRecordItemButton(
+                    target: item,
+                  ),
+                ],
+              ),
             );
           },
         ),
