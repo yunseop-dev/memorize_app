@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/model/record_item.dart';
 import 'package:flutter_todo/screen/record_item_detail.dart';
+import 'package:flutter_todo/util/dateformat.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RecordItemList extends HookConsumerWidget {
@@ -20,7 +21,7 @@ class RecordItemList extends HookConsumerWidget {
             RecordItem item = value[index];
             return ListTile(
               title: Text('녹음 ${index + 1}'),
-              subtitle: Text(item.createdAt.toIso8601String()),
+              subtitle: Text(dateformat(item.createdAt)),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
