@@ -37,13 +37,13 @@ class AddButton extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel')),
+                child: const Text('취소')),
             TextButton(
                 onPressed: () {
                   _addTodoItem(title, text, ref);
                   Navigator.of(context).pop();
                 },
-                child: const Text('Input')),
+                child: const Text('입력')),
           ],
         );
       },

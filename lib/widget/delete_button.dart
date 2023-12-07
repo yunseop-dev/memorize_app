@@ -16,13 +16,13 @@ class DeleteButton extends ConsumerWidget {
       content: const Text("Item will be deleted."),
       actions: [
         TextButton(
-          child: const Text("Cancel"),
+          child: const Text("취소"),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text("Delete"),
+          child: const Text("삭제"),
           onPressed: () {
             _deleteTodoItem(ref);
             Navigator.of(context).pop();
@@ -43,7 +43,7 @@ class DeleteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       icon: const Icon(Icons.delete),
-      tooltip: 'delete',
+      tooltip: '삭제',
       onPressed: () {
         _showDeleteTodoDialog(context, ref);
       },
