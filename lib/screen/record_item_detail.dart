@@ -39,11 +39,14 @@ class RecordItemDetail extends HookConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildTextSection('Script', value.text,
+                    _buildTextSection('내용', value.text,
                         backgroundColor: Colors.cyan.shade100),
-                    _buildTextSection('Recorded', item.text,
-                        backgroundColor: Colors.green.shade200),
-                    _buildOutputSection(value.text),
+                    _buildTextSection('녹음한 내용', item.text,
+                        backgroundColor: Colors.blueGrey.shade50),
+                    _buildOutputSection(value.text,
+                        backgroundColor: value.text == item.text
+                            ? Colors.green.shade200
+                            : Colors.red.shade50),
                   ],
                 ),
               ),
@@ -85,12 +88,13 @@ class RecordItemDetail extends HookConsumerWidget {
     );
   }
 
-  Widget _buildOutputSection(String newText) {
+  Widget _buildOutputSection(String newText,
+      {Color backgroundColor = Colors.transparent}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Diffs',
+          '정답 확인',
           style: TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.bold,
@@ -101,7 +105,7 @@ class RecordItemDetail extends HookConsumerWidget {
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: Colors.red.shade200,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: PrettyDiffText(

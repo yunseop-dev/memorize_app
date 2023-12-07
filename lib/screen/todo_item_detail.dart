@@ -20,16 +20,22 @@ class TodoItemDetailState extends State<TodoItemDetail> {
     super.initState();
   }
 
-  List<Widget> get widgetOptions =>
-      [Text(widget.item.text), RecordItemList(memoryCardId: widget.item.id)];
+  List<Widget> get widgetOptions => [
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            widget.item.text,
+            style: const TextStyle(fontSize: 16.0),
+          ),
+        ),
+        RecordItemList(memoryCardId: widget.item.id)
+      ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.item.title)),
-      body: Center(
-        child: widgetOptions[currentIndex],
-      ),
+      body: widgetOptions[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (value) {
