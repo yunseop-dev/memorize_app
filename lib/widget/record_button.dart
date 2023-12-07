@@ -1,69 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_todo/model/record_item.dart';
-import 'package:flutter_todo/repository/record_item_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-class RecordButton extends StatefulWidget {
+class RecordButton extends HookConsumerWidget {
   final String id;
+  final stt.SpeechToText _speech;
 
-  const RecordButton({Key? key, required this.id}) : super(key: key);
-
-  @override
-  RecordButtonState createState() => RecordButtonState();
-}
-
-class RecordButtonState extends State<RecordButton> {
-  late stt.SpeechToText _speech;
-  bool isListening = false;
-  String recognizedText = '';
+  RecordButton({super.key, required this.id}) : _speech = stt.SpeechToText();
 
   @override
-  void initState() {
-    super.initState();
-    _speech = stt.SpeechToText();
-  }
-
-  void onListen() async {
-    if (!isListening) {
-      bool isAvailable = await _speech.initialize(
-        onStatus: (val) => print('onStatus $val'),
-        onError: (val) => print('onError $val'),
-      );
-
-      if (isAvailable) {
-        setState(() {
-          isListening = true;
-        });
-
-        _speech.listen(
-          onResult: (val) {
-            print(val.recognizedWords);
-            setState(() {
-              recognizedText = val.recognizedWords;
-            });
-          },
-          localeId: 'ko-KR',
-        );
-      }
-    } else {
-      print('recognizedText fin: $recognizedText');
-      RecordItem item =
-          RecordItem(memoryCardId: widget.id, text: recognizedText);
-      RecordItemRepository.add(item);
-      _speech.stop();
-      setState(() {
-        isListening = false;
-        recognizedText = '';
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isListening = useState(false);
+    final recognizedText = useState('');
     return FloatingActionButton(
-      onPressed: onListen,
+      onPressed: () async {
+        if (!isListening.value) {
+          bool isAvailable = await _speech.initialize(
+            onStatus: (val) => print('onStatus $val'),
+            onError: (val) => print('onError $val'),
+          );
+
+          if (isAvailable) {
+            isListening.value = true;
+
+            _speech.listen(
+              onResult: (val) {
+                print(val.recognizedWords);
+                recognizedText.value = val.recognizedWords;
+              },
+              localeId: 'ko-KR',
+            );
+          }
+        } else {
+          print('recognizedText fin: $recognizedText');
+          RecordItem item =
+              RecordItem(memoryCardId: id, text: recognizedText.value);
+          ref.watch(RecordItemListProvider(id).notifier).add(item);
+
+          _speech.stop();
+
+          isListening.value = false;
+          recognizedText.value = '';
+        }
+      },
       tooltip: '녹음하기',
-      child: Icon(!isListening ? Icons.mic : Icons.stop),
+      child: Icon(!isListening.value ? Icons.mic : Icons.stop),
     );
   }
 }

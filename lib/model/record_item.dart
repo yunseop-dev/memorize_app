@@ -40,7 +40,13 @@ class RecordItem {
 }
 
 @riverpod
-Future<List<RecordItem>> recordItemList(
-    RecordItemListRef ref, String memoryCardId) async {
-  return RecordItemRepository.getItems(memoryCardId);
+class RecordItemList extends _$RecordItemList {
+  @override
+  Future<List<RecordItem>> build(String memoryCardId) =>
+      RecordItemRepository.getItems(memoryCardId);
+
+  Future<void> add(RecordItem item) async {
+    RecordItemRepository.add(item);
+    state = state.whenData((value) => [...value, item]);
+  }
 }

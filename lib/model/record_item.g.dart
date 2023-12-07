@@ -6,7 +6,7 @@ part of 'record_item.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recordItemListHash() => r'8bb676ac238db2aa704c0c9da83340c3b049cae2';
+String _$recordItemListHash() => r'a76c2afd1486806dfea325cd82be2dc41a42c2da';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,16 +29,25 @@ class _SystemHash {
   }
 }
 
-/// See also [recordItemList].
-@ProviderFor(recordItemList)
+abstract class _$RecordItemList
+    extends BuildlessAutoDisposeAsyncNotifier<List<RecordItem>> {
+  late final String memoryCardId;
+
+  FutureOr<List<RecordItem>> build(
+    String memoryCardId,
+  );
+}
+
+/// See also [RecordItemList].
+@ProviderFor(RecordItemList)
 const recordItemListProvider = RecordItemListFamily();
 
-/// See also [recordItemList].
+/// See also [RecordItemList].
 class RecordItemListFamily extends Family<AsyncValue<List<RecordItem>>> {
-  /// See also [recordItemList].
+  /// See also [RecordItemList].
   const RecordItemListFamily();
 
-  /// See also [recordItemList].
+  /// See also [RecordItemList].
   RecordItemListProvider call(
     String memoryCardId,
   ) {
@@ -71,17 +80,14 @@ class RecordItemListFamily extends Family<AsyncValue<List<RecordItem>>> {
   String? get name => r'recordItemListProvider';
 }
 
-/// See also [recordItemList].
-class RecordItemListProvider
-    extends AutoDisposeFutureProvider<List<RecordItem>> {
-  /// See also [recordItemList].
+/// See also [RecordItemList].
+class RecordItemListProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    RecordItemList, List<RecordItem>> {
+  /// See also [RecordItemList].
   RecordItemListProvider(
     String memoryCardId,
   ) : this._internal(
-          (ref) => recordItemList(
-            ref as RecordItemListRef,
-            memoryCardId,
-          ),
+          () => RecordItemList()..memoryCardId = memoryCardId,
           from: recordItemListProvider,
           name: r'recordItemListProvider',
           debugGetCreateSourceHash:
@@ -107,13 +113,20 @@ class RecordItemListProvider
   final String memoryCardId;
 
   @override
-  Override overrideWith(
-    FutureOr<List<RecordItem>> Function(RecordItemListRef provider) create,
+  FutureOr<List<RecordItem>> runNotifierBuild(
+    covariant RecordItemList notifier,
   ) {
+    return notifier.build(
+      memoryCardId,
+    );
+  }
+
+  @override
+  Override overrideWith(RecordItemList Function() create) {
     return ProviderOverride(
       origin: this,
       override: RecordItemListProvider._internal(
-        (ref) => create(ref as RecordItemListRef),
+        () => create()..memoryCardId = memoryCardId,
         from: from,
         name: null,
         dependencies: null,
@@ -125,7 +138,8 @@ class RecordItemListProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<RecordItem>> createElement() {
+  AutoDisposeAsyncNotifierProviderElement<RecordItemList, List<RecordItem>>
+      createElement() {
     return _RecordItemListProviderElement(this);
   }
 
@@ -144,14 +158,15 @@ class RecordItemListProvider
   }
 }
 
-mixin RecordItemListRef on AutoDisposeFutureProviderRef<List<RecordItem>> {
+mixin RecordItemListRef
+    on AutoDisposeAsyncNotifierProviderRef<List<RecordItem>> {
   /// The parameter `memoryCardId` of this provider.
   String get memoryCardId;
 }
 
 class _RecordItemListProviderElement
-    extends AutoDisposeFutureProviderElement<List<RecordItem>>
-    with RecordItemListRef {
+    extends AutoDisposeAsyncNotifierProviderElement<RecordItemList,
+        List<RecordItem>> with RecordItemListRef {
   _RecordItemListProviderElement(super.provider);
 
   @override
