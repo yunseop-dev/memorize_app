@@ -43,6 +43,9 @@ dependencies:
   riverpod_annotation: ^2.3.1
   speech_to_text: ^6.4.1
   pretty_diff_text: ^1.0.0
+  permission_handler: ^11.0.1
+  flutter_email_sender: ^6.0.2
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
