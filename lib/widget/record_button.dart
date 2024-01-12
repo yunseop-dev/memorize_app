@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_todo/model/record_item.dart';
+import 'package:flutter_todo/widget/wave.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -14,39 +15,48 @@ class RecordButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isListening = useState(false);
     final recognizedText = useState('');
-    return FloatingActionButton(
-      onPressed: () async {
-        if (!isListening.value) {
-          bool isAvailable = await _speech.initialize(
-            onStatus: (val) => print('onStatus $val'),
-            onError: (val) => print('onError $val'),
-          );
+    return !isListening.value
+        ? FloatingActionButton(
+            onPressed: () async {
+              bool isAvailable = await _speech.initialize(
+                onStatus: (val) => print('onStatus $val'),
+                onError: (val) => print('onError $val'),
+              );
 
-          if (isAvailable) {
-            isListening.value = true;
+              if (isAvailable) {
+                isListening.value = true;
 
-            _speech.listen(
-              onResult: (val) {
-                print(val.recognizedWords);
-                recognizedText.value = val.recognizedWords;
-              },
-              localeId: 'ko-KR',
-            );
-          }
-        } else {
-          print('recognizedText fin: $recognizedText');
-          RecordItem item =
-              RecordItem(memoryCardId: id, text: recognizedText.value);
-          ref.watch(RecordItemListProvider(id).notifier).add(item);
+                _speech.listen(
+                  onResult: (val) {
+                    print(val.recognizedWords);
+                    recognizedText.value = val.recognizedWords;
+                  },
+                  localeId: 'ko-KR',
+                );
+              }
+            },
+            tooltip: '녹음하기',
+            backgroundColor: Colors.black,
+            child: const Icon(Icons.mic),
+          )
+        : FilledButton(
+            onPressed: () {
+              print('recognizedText fin: $recognizedText');
+              RecordItem item =
+                  RecordItem(memoryCardId: id, text: recognizedText.value);
+              ref.watch(RecordItemListProvider(id).notifier).add(item);
 
-          _speech.stop();
+              _speech.stop();
 
-          isListening.value = false;
-          recognizedText.value = '';
-        }
-      },
-      tooltip: '녹음하기',
-      child: Icon(!isListening.value ? Icons.mic : Icons.stop),
-    );
+              isListening.value = false;
+              recognizedText.value = '';
+            },
+            style: FilledButton.styleFrom(
+                backgroundColor: Colors.black, fixedSize: const Size(140, 56)),
+            child: const SpinKitWave(
+              color: Colors.white,
+              size: 20,
+              itemCount: 10,
+            ));
   }
 }

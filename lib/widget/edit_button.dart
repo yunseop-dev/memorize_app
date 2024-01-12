@@ -48,13 +48,19 @@ class EditButton extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('취소')),
+                child: const Text(
+                  '취소',
+                  style: TextStyle(color: Colors.black),
+                )),
             TextButton(
                 onPressed: () {
                   _editTodoItem(title, text, ref);
                   Navigator.of(context).pop();
                 },
-                child: const Text('수정')),
+                child: const Text(
+                  '수정',
+                  style: TextStyle(color: Colors.black),
+                )),
           ],
         );
       },

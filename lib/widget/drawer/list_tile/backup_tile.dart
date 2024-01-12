@@ -12,6 +12,7 @@ class BackupTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: const Text('데이터 백업하기'),
+      trailing: const Icon(Icons.chevron_right),
       onTap: () async {
         final dbFolder = await getDatabasesPath();
         File dbFile = File(join(dbFolder, 'memorize.db'));

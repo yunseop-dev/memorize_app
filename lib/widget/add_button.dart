@@ -14,18 +14,41 @@ class AddButton extends ConsumerWidget {
         return AlertDialog(
           title: const Text('문장 추가'),
           content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                autofocus: true,
-                decoration: const InputDecoration(hintText: '제목을 입력하세요...'),
-                onChanged: (v) {
-                  title = v;
-                },
+              Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                child: TextField(
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    labelText: '제목',
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        borderSide: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                  onChanged: (v) {
+                    title = v;
+                  },
+                ),
               ),
               TextField(
                 maxLines: null,
                 autofocus: true,
-                decoration: const InputDecoration(hintText: '내용을 입력하세요...'),
+                decoration: const InputDecoration(
+                  labelText: '내용',
+                  hintText: '내용을 입력하세요...',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      borderSide: BorderSide(color: Colors.black, width: 2)),
+                ),
                 onChanged: (v) {
                   text = v;
                 },
@@ -37,13 +60,19 @@ class AddButton extends ConsumerWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('취소')),
+                child: const Text(
+                  '취소',
+                  style: TextStyle(color: Colors.black),
+                )),
             TextButton(
                 onPressed: () {
                   _addTodoItem(title, text, ref);
                   Navigator.of(context).pop();
                 },
-                child: const Text('입력')),
+                child: const Text(
+                  '입력',
+                  style: TextStyle(color: Colors.black),
+                )),
           ],
         );
       },
@@ -56,12 +85,38 @@ class AddButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FloatingActionButton(
-      onPressed: () {
-        _showAddTodoDialog(context, ref);
-      },
-      tooltip: '문장 추가',
-      child: const Icon(Icons.add),
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              width: 40,
+              height: 40,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 1),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+              child: IconButton.outlined(
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    _showAddTodoDialog(context, ref);
+                  }))
+        ],
+      ),
     );
   }
 }

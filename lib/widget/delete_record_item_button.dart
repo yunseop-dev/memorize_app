@@ -18,13 +18,19 @@ class DeleteRecordItemButton extends ConsumerWidget {
       content: const Text("녹음한 내용이 삭제됩니다."),
       actions: [
         TextButton(
-          child: const Text("취소"),
+          child: const Text(
+            "취소",
+            style: TextStyle(color: Colors.black),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text("삭제"),
+          child: const Text(
+            "삭제",
+            style: TextStyle(color: Colors.red),
+          ),
           onPressed: () {
             _deleteItem(ref);
             Navigator.of(context).pop();
@@ -44,7 +50,10 @@ class DeleteRecordItemButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-      icon: const Icon(Icons.delete),
+      icon: const Icon(
+        Icons.delete,
+        color: Colors.black,
+      ),
       tooltip: '삭제',
       onPressed: () {
         _showDeleteItemDialog(context, ref);

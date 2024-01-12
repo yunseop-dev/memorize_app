@@ -31,55 +31,160 @@ class TodoScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<Todo>> todo = ref.watch(filteredTodoProvider);
-    final currentIndex = useState(0);
+    final tapIndex = useState(0);
+    final navIndex = useState(0);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('문장 암기 앱'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            ListTile(),
-            ListTile(
-              title: Text(
-                '메뉴',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            // ListTile(title: Text('개인정보처리방침')),
-            // ListTile(title: Text('오픈소스 라이선스')),
-            BackupTile(),
-            RestoreTile()
-          ],
+        title: const Text(
+          '암기 목록',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w700,
+          ),
         ),
+        actions: const [AddButton()],
+        toolbarHeight: 72,
+        centerTitle: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-      body: switch (todo) {
-        AsyncError(:final error) => Text('Error: $error'),
-        AsyncData(:final value) => ListView.builder(
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              Todo item = value[index];
-              return TodoListTile(item: item);
-            }),
-        _ => const Center(child: CircularProgressIndicator()),
-      },
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+        child: navIndex.value < 2
+            ? Column(
+                children: [
+                  Visibility(
+                    visible: navIndex.value == 1,
+                    child: Row(children: <Widget>[
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                            backgroundColor: tapIndex.value == 0
+                                ? Colors.black
+                                : Colors.white),
+                        onPressed: () {
+                          tapIndex.value = 0;
+                          TodoListFilter type = TodoListFilter.values[0];
+                          ref.read(todoListFilter.notifier).state = type;
+                        },
+                        child: Text(
+                          '암기 중',
+                          style: TextStyle(
+                            color: tapIndex.value == 0
+                                ? Colors.white
+                                : Colors.black.withOpacity(0.3),
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                            backgroundColor: tapIndex.value == 1
+                                ? Colors.black
+                                : Colors.white),
+                        onPressed: () {
+                          tapIndex.value = 1;
+                          TodoListFilter type = TodoListFilter.values[1];
+                          ref.read(todoListFilter.notifier).state = type;
+                        },
+                        child: Text(
+                          '암기 완료',
+                          style: TextStyle(
+                            color: tapIndex.value == 1
+                                ? Colors.white
+                                : Colors.black.withOpacity(0.3),
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: switch (todo) {
+                        AsyncError(:final error) => Text('Error: $error'),
+                        AsyncData(:final value) => ListView.builder(
+                            itemCount: value.length,
+                            itemBuilder: (context, index) {
+                              Todo item = value[index];
+                              return TodoListTile(item: item);
+                            }),
+                        _ => const Center(child: CircularProgressIndicator()),
+                      },
+                    ),
+                  )
+                ],
+              )
+            : ListView(
+                padding: EdgeInsets.zero,
+                children: const [
+                  ListTile(
+                    title: Text(
+                      '데이터 백업 & 복원',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  BackupTile(),
+                  RestoreTile(),
+                  ListTile(
+                    title: Text(
+                      '서비스 정보',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('문의하기'),
+                    trailing: Icon(Icons.chevron_right),
+                  ),
+                  ListTile(
+                    title: Text('약관 및 정책'),
+                    trailing: Icon(Icons.chevron_right),
+                  ),
+                  ListTile(
+                    title: Text('개인정보처리방침'),
+                    trailing: Icon(Icons.chevron_right),
+                  ),
+                  ListTile(
+                    title: Text('오픈소스 라이선스'),
+                    trailing: Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.library_books), label: '암기 중'),
-          BottomNavigationBarItem(icon: Icon(Icons.done_all), label: '완료'),
-          BottomNavigationBarItem(icon: Icon(Icons.all_inbox), label: '전체보기'),
+              icon: Icon(Icons.library_books), label: '전체보기'),
+          BottomNavigationBarItem(icon: Icon(Icons.done_all), label: '암기 목록'),
+          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
         ],
-        currentIndex: currentIndex.value,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black.withOpacity(0.5),
+        currentIndex: navIndex.value,
         onTap: (value) {
-          currentIndex.value = value;
-          TodoListFilter type = TodoListFilter.values[value];
-          ref.read(todoListFilter.notifier).state = type;
+          navIndex.value = value;
+          if (value == 0) {
+            tapIndex.value = 2;
+            TodoListFilter type = TodoListFilter.values[2];
+            ref.read(todoListFilter.notifier).state = type;
+          }
+          if (value == 1) {
+            tapIndex.value = 0;
+            TodoListFilter type = TodoListFilter.values[0];
+            ref.read(todoListFilter.notifier).state = type;
+          }
         },
       ),
-      floatingActionButton: const AddButton(),
     );
   }
 }

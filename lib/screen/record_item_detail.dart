@@ -17,22 +17,24 @@ class RecordItemDetail extends HookConsumerWidget {
     return switch (card) {
       AsyncError(:final error) => Text('Error: $error'),
       AsyncData(:final value) => Scaffold(
-          appBar: AppBar(title: Text('${value.title} / 녹음 $index')),
+          appBar: AppBar(
+            title: Text('${value.title} / 녹음 $index'),
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black),
+            backgroundColor: Colors.white,
+            titleTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           body: Container(
             color: Colors.green[100],
             child: Center(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
                 ),
                 padding: const EdgeInsets.all(16.0),
                 constraints: const BoxConstraints(maxWidth: 400.0),
@@ -58,63 +60,92 @@ class RecordItemDetail extends HookConsumerWidget {
 
   Widget _buildTextSection(String title, String text,
       {Color backgroundColor = Colors.transparent}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: ShapeDecoration(
+        color: backgroundColor,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: Colors.black.withOpacity(0.1),
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        const SizedBox(height: 5.0),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 4),
+            child: Text(
+              title,
+              textAlign: TextAlign.justify,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10.0),
-      ],
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildOutputSection(String newText,
       {Color backgroundColor = Colors.transparent}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          '정답 확인',
-          style: TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: ShapeDecoration(
+        color: backgroundColor,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: Colors.black.withOpacity(0.1),
           ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        const SizedBox(height: 5.0),
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 4),
+            child: const Text(
+              '정답 확인',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
-          child: PrettyDiffText(
+          PrettyDiffText(
             oldText: item.text,
             newText: newText,
+            defaultTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-        const SizedBox(height: 10.0),
-      ],
+        ],
+      ),
     );
   }
 }

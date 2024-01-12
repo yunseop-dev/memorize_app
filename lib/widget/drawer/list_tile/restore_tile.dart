@@ -28,6 +28,7 @@ class RestoreTile extends HookConsumerWidget {
         }
       },
       title: const Text('데이터 불러오기'),
+      trailing: const Icon(Icons.chevron_right),
     );
   }
 }
