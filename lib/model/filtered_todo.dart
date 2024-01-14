@@ -1,4 +1,4 @@
-import 'package:flutter_todo/model/todo.dart';
+import 'package:malo_aamgi/model/todo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

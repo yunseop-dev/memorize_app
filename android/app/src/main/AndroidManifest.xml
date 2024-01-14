@@ -25,7 +25,7 @@
         </intent>
     </queries>
     <application
-        android:label="flutter_todo"
+        android:label="malo_aamgi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,4 +1,4 @@
-package com.example.flutter_todo
+package app.web.frontend-mastery.malo_aamgi
 
 import io.flutter.embedding.android.FlutterActivity
 

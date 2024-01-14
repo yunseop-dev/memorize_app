@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_todo/widget/tweens/delay_tween.dart';
+import 'package:malo_aamgi/widget/tweens/delay_tween.dart';
 
 enum SpinKitWaveType { start, end, center }
 

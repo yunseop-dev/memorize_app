@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/record_item.dart';
-import 'package:flutter_todo/model/todo.dart';
+import 'package:malo_aamgi/model/record_item.dart';
+import 'package:malo_aamgi/model/todo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pretty_diff_text/pretty_diff_text.dart';
 

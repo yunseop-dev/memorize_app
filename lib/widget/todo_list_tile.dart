@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/screen/todo_item_detail.dart';
-import 'package:flutter_todo/widget/delete_button.dart';
-import 'package:flutter_todo/widget/edit_button.dart';
-import 'package:flutter_todo/widget/todo_checkbox.dart';
+import 'package:malo_aamgi/model/todo.dart';
+import 'package:malo_aamgi/screen/todo_item_detail.dart';
+import 'package:malo_aamgi/widget/delete_button.dart';
+import 'package:malo_aamgi/widget/edit_button.dart';
+import 'package:malo_aamgi/widget/todo_checkbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TodoListTile extends ConsumerWidget {

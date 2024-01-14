@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/record_item.dart';
+import 'package:malo_aamgi/model/record_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DeleteRecordItemButton extends ConsumerWidget {

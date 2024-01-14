@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_todo/model/filtered_todo.dart';
-import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/screen/oss_licenses_page.dart';
-import 'package:flutter_todo/widget/add_button.dart';
-import 'package:flutter_todo/widget/drawer/list_tile/backup_tile.dart';
-import 'package:flutter_todo/widget/drawer/list_tile/restore_tile.dart';
-import 'package:flutter_todo/widget/todo_list_tile.dart';
+import 'package:malo_aamgi/model/filtered_todo.dart';
+import 'package:malo_aamgi/model/todo.dart';
+import 'package:malo_aamgi/screen/oss_licenses_page.dart';
+import 'package:malo_aamgi/widget/add_button.dart';
+import 'package:malo_aamgi/widget/drawer/list_tile/backup_tile.dart';
+import 'package:malo_aamgi/widget/drawer/list_tile/restore_tile.dart';
+import 'package:malo_aamgi/widget/todo_list_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,7 +47,7 @@ class TodoScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '암기 목록',
+          '말로암기',
           style: TextStyle(
             color: Colors.black,
             fontSize: 24,

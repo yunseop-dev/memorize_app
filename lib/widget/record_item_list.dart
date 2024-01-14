@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/record_item.dart';
-import 'package:flutter_todo/screen/record_item_detail.dart';
-import 'package:flutter_todo/util/dateformat.dart';
-import 'package:flutter_todo/widget/delete_record_item_button.dart';
+import 'package:malo_aamgi/model/record_item.dart';
+import 'package:malo_aamgi/screen/record_item_detail.dart';
+import 'package:malo_aamgi/util/dateformat.dart';
+import 'package:malo_aamgi/widget/delete_record_item_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RecordItemList extends HookConsumerWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/model/todo.dart';
-import 'package:flutter_todo/widget/record_button.dart';
-import 'package:flutter_todo/widget/record_item_list.dart';
+import 'package:malo_aamgi/model/todo.dart';
+import 'package:malo_aamgi/widget/record_button.dart';
+import 'package:malo_aamgi/widget/record_item_list.dart';
 
 class TodoItemDetail extends StatefulWidget {
   final Todo item;

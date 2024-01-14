@@ -1,5 +1,5 @@
-import 'package:flutter_todo/db/db.dart';
-import 'package:flutter_todo/model/record_item.dart';
+import 'package:malo_aamgi/db/db.dart';
+import 'package:malo_aamgi/model/record_item.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecordItemRepository {

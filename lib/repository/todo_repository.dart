@@ -1,5 +1,5 @@
-import 'package:flutter_todo/db/db.dart';
-import 'package:flutter_todo/model/todo.dart';
+import 'package:malo_aamgi/db/db.dart';
+import 'package:malo_aamgi/model/todo.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TodoRepository {
