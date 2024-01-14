@@ -46,10 +46,12 @@ dependencies:
   permission_handler: ^11.0.1
   flutter_email_sender: ^6.0.2
   file_picker: ^6.1.1
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_oss_licenses: ^2.0.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

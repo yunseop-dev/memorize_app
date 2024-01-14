@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_todo/model/filtered_todo.dart';
 import 'package:flutter_todo/model/todo.dart';
+import 'package:flutter_todo/screen/oss_licenses_page.dart';
 import 'package:flutter_todo/widget/add_button.dart';
 import 'package:flutter_todo/widget/drawer/list_tile/backup_tile.dart';
 import 'package:flutter_todo/widget/drawer/list_tile/restore_tile.dart';
 import 'package:flutter_todo/widget/todo_list_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const ProviderScope(child: MyApp()));
 
@@ -27,6 +29,14 @@ class MyApp extends StatelessWidget {
 
 class TodoScreen extends HookConsumerWidget {
   const TodoScreen({super.key});
+
+  Future<void> _launchUrl(String uri) async {
+    final Uri url = Uri.parse(uri);
+
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,36 +137,51 @@ class TodoScreen extends HookConsumerWidget {
               )
             : ListView(
                 padding: EdgeInsets.zero,
-                children: const [
-                  ListTile(
+                children: [
+                  const ListTile(
                     title: Text(
                       '데이터 백업 & 복원',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  BackupTile(),
-                  RestoreTile(),
-                  ListTile(
+                  const BackupTile(),
+                  const RestoreTile(),
+                  const ListTile(
                     title: Text(
                       '서비스 정보',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   ListTile(
-                    title: Text('문의하기'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('문의하기'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      _launchUrl('mailto:c.o.d.e@kakao.com');
+                    },
                   ),
                   ListTile(
-                    title: Text('약관 및 정책'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('사용 가이드'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      _launchUrl(
+                          'https://www.notion.so/yunseop/57ca5b3034f540a5b624b06459444880?pvs=4');
+                    },
                   ),
                   ListTile(
-                    title: Text('개인정보처리방침'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('개인정보처리방침'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      _launchUrl(
+                          'https://yunseop.notion.site/98746330a18e47f18133f2fa8fa7a4f7?pvs=4');
+                    },
                   ),
                   ListTile(
-                    title: Text('오픈소스 라이선스'),
-                    trailing: Icon(Icons.chevron_right),
+                    title: const Text('오픈소스 라이선스'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const OssLicensesPage()));
+                    },
                   ),
                 ],
               ),
